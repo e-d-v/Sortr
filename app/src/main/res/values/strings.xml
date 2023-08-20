@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Sortr</string>
+    <string name="list_icon_alttext_desc">%1$s icon</string>
+</resources>
