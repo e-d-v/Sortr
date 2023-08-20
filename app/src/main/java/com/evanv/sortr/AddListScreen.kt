@@ -29,7 +29,14 @@ fun AddListScreen(addMode: MutableState<Int>, listOfLists: MutableList<SortrList
         Mode1(imageUrl, listName, addMode, padding, listOfLists, listDao)
     }
     else if (addMode.value == 2) {
-        Mode2(addMode, padding, getList(listName.value, listOfLists)!!, listDao, itemDao)
+        Mode2(
+            addMode,
+            padding,
+            getList(listName.value, listOfLists)!!,
+            listDao,
+            itemDao,
+            null
+        )
     }
 }
 
@@ -80,8 +87,9 @@ fun Mode1(imageUrl: MutableState<String>, listName: MutableState<String>, addMod
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Mode2(addMode: MutableState<Int>, padding: PaddingValues, list: SortrList, listDao: ListDao,
-          itemDao: ItemDao) {
+fun Mode2(
+    addMode: MutableState<Int>, padding: PaddingValues, list: SortrList, listDao: ListDao,
+    itemDao: ItemDao, activeList: MutableState<String?>?) {
     val itemUrl = remember { mutableStateOf("") }
     val itemDesc = remember { mutableStateOf("") }
     val itemName = remember { mutableStateOf("") }
@@ -143,6 +151,7 @@ fun Mode2(addMode: MutableState<Int>, padding: PaddingValues, list: SortrList, l
                     item.uid = uid
                     list.addToList(item)
                     list.cache[item.uid] = mutableSetOf()
+                    list.finishedAdding = true
 
                     listDao.update(list)
                 }.start()
@@ -152,6 +161,10 @@ fun Mode2(addMode: MutableState<Int>, padding: PaddingValues, list: SortrList, l
                 itemUrl.value = ""
 
                 addMode.value = 0
+
+                if (activeList != null) {
+                    activeList.value = null
+                }
             }) {
                 Text("Finish Adding")
             }

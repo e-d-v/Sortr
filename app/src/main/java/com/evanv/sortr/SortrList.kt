@@ -20,7 +20,8 @@ data class SortrList(@ColumnInfo(name = "name") val name: String,
                      @ColumnInfo(name = "j") var j: Int = 0,
                      @ColumnInfo(name = "initialized") var init: Boolean = false,
                      @ColumnInfo(name = "cache") var cache: MutableMap<Long, MutableSet<Long>>
-                        = mutableMapOf()) {
+                        = mutableMapOf(),
+                     @ColumnInfo(name = "finishedAdding") var finishedAdding: Boolean = false) {
 
     @Ignore
     private val internalList = mutableListOf<Item>()

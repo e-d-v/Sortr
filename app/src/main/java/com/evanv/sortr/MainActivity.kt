@@ -109,8 +109,17 @@ class MainActivity : ComponentActivity() {
                             if (addMode.value != 0 && activeList.value == null) {
                                 AddListScreen(addMode, listOfLists!!, padding, listDao!!, itemDao!!)
                             } else if (addMode.value != 0) {
-                                AddItemToList(addMode, padding, getList(activeList.value!!,
-                                    listOfLists!!)!!, listDao!!, itemDao!!)
+                                if (getList(activeList.value!!, listOfLists!!)!!.finishedAdding) {
+                                    AddItemToList(addMode, padding,
+                                        getList(activeList.value!!, listOfLists!!)!!, listDao!!,
+                                        itemDao!!
+                                    )
+                                }
+                                else {
+                                    Mode2(addMode, padding,
+                                        getList(activeList.value!!, listOfLists!!)!!, listDao!!,
+                                        itemDao!!, activeList)
+                                }
                             } else if (activeList.value == null) {
                                 ListOfListsScreen(padding, listOfLists!!, activeList)
                             } else if ("duplicate::" in activeList.value!!) {
@@ -135,7 +144,11 @@ class MainActivity : ComponentActivity() {
                                         getList(activeList.value!!, listOfLists!!)!!.list,
                                         padding
                                     )
-                                } else {
+                                }
+                                else if (!getList(activeList.value!!, listOfLists!!)!!.finishedAdding) {
+                                    addMode.value = 2
+                                }
+                                else {
                                     val logic = remember {
                                         SorterLogic(
                                             getList(activeList.value!!, listOfLists!!)!!,
