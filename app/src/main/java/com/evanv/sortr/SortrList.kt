@@ -58,6 +58,12 @@ data class SortrList(@ColumnInfo(name = "name") val name: String,
     }
 
     fun copy(): SortrList {
-        return SortrList(name, img, dbList.toMutableList())
+        val list = SortrList(name, img, dbList.toMutableList())
+
+        for (item in dbList) {
+            list.cache[item] = mutableSetOf()
+        }
+
+        return list
     }
 }
